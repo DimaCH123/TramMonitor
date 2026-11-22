@@ -1,0 +1,553 @@
+﻿<UserControl x:Class="TramMonitor.Views.AnalyticsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+
+        <StackPanel Background="#F4F6F8" Margin="10">
+
+            <TextBlock Text="Аналитика движения"
+                       FontSize="26"
+                       FontWeight="SemiBold"
+                       Foreground="#243447"
+                       Margin="0,0,0,5"/>
+
+            <TextBlock Text="{Binding CurrentTimeText, StringFormat='Виртуальное время: {0}'}"
+                       FontSize="13"
+                       Foreground="#718096"
+                       Margin="0,0,0,18"/>
+
+            <!-- ОБЩАЯ ИНФОРМАЦИЯ -->
+
+            <UniformGrid Columns="2" Margin="0,0,0,15">
+
+                <Border Background="White" CornerRadius="8"
+                        Padding="15" Margin="0,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="ВСЕГО ТРАМВАЕВ"
+                                   FontSize="11" Foreground="#718096"/>
+                        <TextBlock Text="{Binding TotalTramsText}"
+                                   FontSize="26" FontWeight="Bold"
+                                   Foreground="#243447"/>
+                        <TextBlock Text="В модели"
+                                   FontSize="11" Foreground="#718096"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8"
+                        Padding="15" Margin="6,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="ЗАВЕРШИЛИ СМЕНУ"
+                                   FontSize="11" Foreground="#718096"/>
+                        <TextBlock Text="{Binding FinishedTramsText}"
+                                   FontSize="26" FontWeight="Bold"
+                                   Foreground="#218838"/>
+                        <TextBlock Text="Вагонов"
+                                   FontSize="11" Foreground="#718096"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
+
+            <!-- ПОКАЗАТЕЛИ ПО МАРШРУТАМ -->
+
+            <TextBlock Text="Показатели маршрутов"
+                       FontSize="20" FontWeight="SemiBold"
+                       Foreground="#243447"
+                       Margin="0,0,0,10"/>
+
+            <ItemsControl ItemsSource="{Binding RouteSummaryRows}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White"
+                                BorderBrush="#DCE2E8"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="15"
+                                Margin="0,0,8,12">
+
+                            <StackPanel>
+                                <TextBlock Text="{Binding RouteNumber,
+                                    StringFormat='МАРШРУТ №{0}'}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="#243447"
+                                           Margin="0,0,0,12"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Плановый интервал"
+                                                   FontSize="11"
+                                                   Foreground="#718096"/>
+                                        <TextBlock Text="{Binding PlannedInterval}"
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#2878B5"
+                                                   Margin="0,2,0,9"/>
+
+                                        <TextBlock Text="Средний интервал"
+                                                   FontSize="11"
+                                                   Foreground="#718096"/>
+                                        <TextBlock Text="{Binding AverageInterval}"
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#243447"
+                                                   Margin="0,2,0,9"/>
+
+                                        <TextBlock Text="Минимальный интервал"
+                                                   FontSize="11"
+                                                   Foreground="#718096"/>
+                                        <TextBlock Text="{Binding MinimumInterval}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#218838"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Максимальный интервал"
+                                                   FontSize="11"
+                                                   Foreground="#718096"/>
+                                        <TextBlock Text="{Binding MaximumInterval}"
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#C0392B"
+                                                   Margin="0,2,0,9"/>
+
+                                        <TextBlock Text="Среднее отклонение"
+                                                   FontSize="11"
+                                                   Foreground="#718096"/>
+                                        <TextBlock Text="{Binding AverageDeviation}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#94600C"
+                                                   Margin="0,2,0,9"/>
+
+                                        <TextBlock Text="Увеличенных интервалов"
+                                                   FontSize="11"
+                                                   Foreground="#718096"/>
+                                        <TextBlock Text="{Binding DelayCount}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#C0392B"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- ЗАДЕРЖКИ -->
+
+            <TextBlock Text="Анализ увеличенных интервалов"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       Foreground="#243447"
+                       Margin="0,5,0,10"/>
+
+            <UniformGrid Columns="4" Margin="0,0,0,15">
+
+                <Border Background="White" CornerRadius="8"
+                        Padding="12" Margin="0,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="СЛУЧАЕВ"
+                                   FontSize="10" Foreground="#718096"/>
+                        <TextBlock Text="{Binding DelayEventsText}"
+                                   FontSize="23" FontWeight="Bold"
+                                   Foreground="#C0392B"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8"
+                        Padding="12" Margin="3,0">
+                    <StackPanel>
+                        <TextBlock Text="СРЕДНЕЕ УВЕЛИЧЕНИЕ"
+                                   FontSize="10" Foreground="#718096"/>
+                        <TextBlock Text="{Binding AverageDelayText}"
+                                   FontSize="20" FontWeight="Bold"
+                                   Foreground="#94600C"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8"
+                        Padding="12" Margin="3,0">
+                    <StackPanel>
+                        <TextBlock Text="МАКСИМАЛЬНОЕ"
+                                   FontSize="10" Foreground="#718096"/>
+                        <TextBlock Text="{Binding MaximumDelayText}"
+                                   FontSize="20" FontWeight="Bold"
+                                   Foreground="#C0392B"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8"
+                        Padding="12" Margin="6,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="СУММАРНОЕ УВЕЛИЧЕНИЕ"
+                                   FontSize="10" Foreground="#718096"/>
+                        <TextBlock Text="{Binding TotalDelayText}"
+                                   FontSize="20" FontWeight="Bold"
+                                   Foreground="#243447"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
+
+            <!-- ДИАГРАММА ОТКЛОНЕНИЙ -->
+
+            <Border Background="White"
+                    BorderBrush="#DCE2E8"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0,0,0,15">
+
+                <StackPanel>
+                    <TextBlock Text="Отклонение интервалов от планового значения"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="#243447"
+                               Margin="0,0,0,5"/>
+
+                    <TextBlock Text="Каждая полоса показывает разницу между фактическим интервалом и плановым. Слева — интервал меньше плана, справа — больше."
+                               TextWrapping="Wrap"
+                               FontSize="12"
+                               Foreground="#718096"
+                               Margin="0,0,0,12"/>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="125"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="85"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="Время / маршрут"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"
+                                   Foreground="#718096"/>
+
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Меньше плана"
+                                       HorizontalAlignment="Center"
+                                       FontSize="10"
+                                       Foreground="#218838"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="Больше плана"
+                                       HorizontalAlignment="Center"
+                                       FontSize="10"
+                                       Foreground="#C0392B"/>
+                        </Grid>
+
+                        <TextBlock Grid.Column="2"
+                                   Text="Отклонение"
+                                   HorizontalAlignment="Right"
+                                   FontSize="10"
+                                   FontWeight="SemiBold"
+                                   Foreground="#718096"/>
+                    </Grid>
+
+                    <ScrollViewer MaxHeight="360"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+
+                        <ItemsControl ItemsSource="{Binding DeviationRows}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="25" Margin="0,1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="125"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="85"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0"
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding TimeText}"
+                                                       FontSize="10"
+                                                       Foreground="#526273"
+                                                       Width="58"/>
+
+                                            <TextBlock Text="{Binding RouteNumber,
+                                                StringFormat='№{0}'}"
+                                                       FontSize="10"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#243447"/>
+                                        </StackPanel>
+
+                                        <Grid Grid.Column="1"
+                                              Margin="0,0,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="2"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Grid.Column="0"
+                                                    Background="#F1F3F6"
+                                                    HorizontalAlignment="Stretch"/>
+
+                                            <Border Grid.Column="2"
+                                                    Background="#F1F3F6"
+                                                    HorizontalAlignment="Stretch"/>
+
+                                            <Rectangle Grid.Column="1"
+                                                       Fill="#526273"
+                                                       Width="2"/>
+
+                                            <Border Grid.Column="0"
+                                                    Width="{Binding LeftBarWidth}"
+                                                    Height="13"
+                                                    HorizontalAlignment="Right"
+                                                    Background="#269B65"
+                                                    CornerRadius="3"
+                                                    Margin="0,0,0,0"/>
+
+                                            <Border Grid.Column="2"
+                                                    Width="{Binding RightBarWidth}"
+                                                    Height="13"
+                                                    HorizontalAlignment="Left"
+                                                    Background="#D65A55"
+                                                    CornerRadius="3"
+                                                    Margin="0,0,0,0"/>
+                                        </Grid>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding DeviationLabel}"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="10"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#526273"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <TextBlock Text="Зелёный — интервал меньше планового. Красный — интервал больше планового. Нулевая линия — точное соответствие плану."
+                               FontSize="11"
+                               Foreground="#718096"
+                               Margin="0,10,0,0"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ТАБЛИЦА ИНТЕРВАЛОВ -->
+
+            <Border Background="White"
+                    BorderBrush="#DCE2E8"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0,0,0,15">
+
+                <StackPanel>
+                    <TextBlock Text="Последние фактические интервалы"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="#243447"
+                               Margin="0,0,0,10"/>
+
+                    <DataGrid ItemsSource="{Binding HeadwayRows}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              RowHeaderWidth="0"
+                              MaxHeight="300"
+                              FontSize="12">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Время"
+                                                Binding="{Binding TimeText}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Маршрут"
+                                                Binding="{Binding RouteNumber}"
+                                                Width="70"/>
+
+                            <DataGridTextColumn Header="Вагон"
+                                                Binding="{Binding TramNumber}"
+                                                Width="65"/>
+
+                            <DataGridTextColumn Header="Фактический"
+                                                Binding="{Binding ActualLabel}"
+                                                Width="110"/>
+
+                            <DataGridTextColumn Header="Плановый"
+                                                Binding="{Binding PlannedLabel}"
+                                                Width="110"/>
+
+                            <DataGridTextColumn Header="Отклонение"
+                                                Binding="{Binding DeviationLabel}"
+                                                Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- ИСТОРИЯ ПАРКА -->
+
+            <Border Background="White"
+                    BorderBrush="#DCE2E8"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0,0,0,15">
+
+                <StackPanel>
+                    <TextBlock Text="Количество трамваев на линии"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="#243447"
+                               Margin="0,0,0,5"/>
+
+                    <TextBlock Text="История изменения количества вагонов в движении и на остановках."
+                               FontSize="12"
+                               Foreground="#718096"
+                               Margin="0,0,0,12"/>
+
+                    <DataGrid ItemsSource="{Binding FleetRows}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              RowHeaderWidth="0"
+                              MaxHeight="250"
+                              FontSize="12">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Время"
+                                                Binding="{Binding TimeText}"
+                                                Width="110"/>
+
+                            <DataGridTextColumn Header="На линии"
+                                                Binding="{Binding OnLineCount}"
+                                                Width="100"/>
+
+                            <DataGridTemplateColumn Header="Загрузка парка"
+                                                    Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ProgressBar Value="{Binding OnLineCount}"
+                                                     Maximum="{Binding TotalCount}"
+                                                     Height="13"
+                                                     Margin="5,3"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Header="Всего"
+                                                Binding="{Binding TotalCount}"
+                                                Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- ОБЕДЫ И ПЕРЕСМЕНКИ -->
+
+            <Border Background="White"
+                    BorderBrush="#DCE2E8"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0,0,0,15">
+
+                <StackPanel>
+                    <TextBlock Text="Влияние обедов и пересменок на интервалы"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="#243447"
+                               Margin="0,0,0,5"/>
+
+                    <TextBlock Text="Сравнение средних интервалов за 30 минут до ухода, во время отсутствия вагона и за 30 минут после возвращения."
+                               TextWrapping="Wrap"
+                               FontSize="12"
+                               Foreground="#718096"
+                               Margin="0,0,0,12"/>
+
+                    <DataGrid ItemsSource="{Binding AbsenceRows}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              RowHeaderWidth="0"
+                              MaxHeight="400"
+                              FontSize="12">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Начало"
+                                                Binding="{Binding StartTime}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="Окончание"
+                                                Binding="{Binding EndTime}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="Маршрут"
+                                                Binding="{Binding RouteNumber}"
+                                                Width="65"/>
+
+                            <DataGridTextColumn Header="Вагон"
+                                                Binding="{Binding TramNumber}"
+                                                Width="55"/>
+
+                            <DataGridTextColumn Header="Событие"
+                                                Binding="{Binding Type}"
+                                                Width="95"/>
+
+                            <DataGridTextColumn Header="Продолжительность"
+                                                Binding="{Binding Duration}"
+                                                Width="115"/>
+
+                            <DataGridTextColumn Header="До"
+                                                Binding="{Binding BeforeInterval}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="Во время"
+                                                Binding="{Binding DuringInterval}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="После"
+                                                Binding="{Binding AfterInterval}"
+                                                Width="85"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="{Binding LogEntriesText, StringFormat='Записей в журнале модели: {0}'}"
+                       FontSize="11"
+                       Foreground="#8793A1"
+                       Margin="0,0,0,10"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

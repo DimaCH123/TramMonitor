@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="TramMonitor.Views.TrackingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <Border Background="White"
+                CornerRadius="12"
+                Padding="28">
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Отслеживание трамваев"
+                           FontSize="26"
+                           FontWeight="SemiBold"
+                           Foreground="#24344F"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock Text="Раздел предназначен для отображения реального местоположения трамваев и данных от системы позиционирования."
+                           FontSize="14"
+                           Foreground="#718096"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           MaxWidth="480"
+                           Margin="0,14,0,0"/>
+
+                <TextBlock Text="Функциональность будет добавлена на следующем этапе."
+                           FontSize="13"
+                           Foreground="#9AA6B8"
+                           HorizontalAlignment="Center"
+                           Margin="0,10,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
